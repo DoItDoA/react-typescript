@@ -1,26 +1,46 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import Number from "./Number";
+import { Form, Input } from "./Input";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+interface IState {
+  counter: number;
+  name: string;
 }
 
+// class의 state typescript 적용
+class App extends Component<{}, IState> {
+  state = {
+    counter: 0,
+    name: "",
+  };
+
+  render() {
+    const { counter, name } = this.state;
+    return (
+      <div>
+        <Form onFormSubmit={this.onFormSubmit}>
+          <Input value={name} onChange={this.onChange} />
+        </Form>
+        <Number count={counter} />
+        <button onClick={this.add}>Add</button>
+      </div>
+    );
+  }
+
+  // 이벤트 적용
+  onChange = (event: React.SyntheticEvent<HTMLInputElement>) => {
+    console.log(event.target);
+  };
+
+  onFormSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+  };
+  add = (): void => {
+    this.setState((prev) => {
+      return {
+        counter: prev.counter + 1,
+      };
+    }); // this.setState(counter:counter+1) 적용이 안됨
+  };
+}
 export default App;
